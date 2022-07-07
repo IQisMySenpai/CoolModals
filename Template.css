@@ -1,0 +1,123 @@
+:root {
+    --primary: #102027;
+    --primary-light: #abbac4;
+    --secondary: #ffffff;
+    --backdrop: rgba(0, 0, 0, 0.2)
+}
+
+html, body {
+    background-color: rgba(200, 200, 255, 1);
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+}
+
+.modal_backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: var(--backdrop);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background-color: var(--secondary);
+    border: 3px solid var(--primary);
+    border-radius: 0.3rem;
+    max-height: calc(100% - 6rem);
+}
+
+.modal_body {
+    padding: 0.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modal_header {
+    background-color: var(--primary);
+    color: var(--secondary);
+    font-weight: bold;
+    padding: 0.8rem 1.2rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1.2rem;
+}
+
+.modal_buttons {
+    width: 100%;
+    display: flex;
+}
+
+.modal_left_buttons {
+    flex: 50%;
+    margin: 1rem 0.5rem;
+    display: flex;
+}
+
+.modal_right_buttons {
+    flex: 50%;
+    margin: 1rem 0.5rem;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.modal_button {
+    background-color: var(--secondary);
+    border: 2px solid var(--primary);
+    border-radius: 0.3rem;
+    color: var(--primary);
+    font-size: 1rem;
+    margin: 0 0.5rem;
+    padding: 0.4rem 0.8rem;
+    transition-duration: 0.5s;
+}
+
+.modal_button:hover {
+    background-color: var(--primary-light);
+    transition-duration: 0.5s;
+}
+
+.modal_input_wrapper_full, .modal_input_wrapper_half {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.modal_input_wrapper_full {
+    width: 100%;
+}
+
+.modal_input_wrapper_half {
+    width: 50%;
+}
+
+.modal_input_label {
+    flex: 0 0 6rem;
+    font-size: 1rem;
+}
+
+.modal_input {
+    background-color: var(--secondary);
+    border: 2px solid var(--primary);
+    border-radius: 0.3rem;
+    color: var(--primary);
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    width: max-content;
+    flex: 1 1;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
