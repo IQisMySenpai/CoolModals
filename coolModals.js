@@ -129,6 +129,6 @@ window.addEventListener('load', function() {
     modal.add_button('Cancel', function (event) {
         event.data.modal.close_modal();
     }, 'right');
-    modal.add_input('half', 'text', 'Test:', );
-    modal.add_input('half', 'text', 'Test2:', );
+    modal.add_input('half', 'text', 'Name:', '', 'Name');
+    modal.add_input('half', 'text', 'Surname:', '', 'Surname');
 });
