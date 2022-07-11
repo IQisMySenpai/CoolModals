@@ -75,15 +75,54 @@ class coolModal {
         this.modal.find('div.modal_' + side + '_buttons').append(button);
     }
 
-    add_input (size = 'full', type = 'text', label = 'Input', value = '', placeholder = '') {
-        let input = '<div class="modal_input_wrapper_' + size + '">';
-        switch (type) {
+    add_input (inputs) {
+        if (Array.isArray(inputs)) {
+            for (let input = 0; input < inputs.length; input++) {
+                this.new_input(inputs[input]);
+            }
+        } else {
+            this.new_input(inputs);
+        }
+    }
+
+    new_input (obj) {
+        if (obj['id'] === undefined) {
+            return;
+        }
+        let input = '<div class="modal_input_wrapper_' + (obj['size'] || 'full') + '">';
+        switch (obj['type']) {
             case 'text':
             case 'password':
-                input += '<label class="modal_input_label">' + label + '</label>';
-                input += '<input class="modal_input" type="' + type;
-                input += '" value="' + value;
-                input += '" placeholder="' + placeholder + '">';
+            case 'url':
+            case 'tel':
+            case 'search':
+            case 'number':
+            case 'email':
+                input += '<label class="modal_input_label" for="' + obj['id'] + '">';
+                input += (obj['label'] || 'Input') + '</label>';
+                input += '<input class="modal_input" type="' + (obj['type'] || 'text');
+                input += '" value="' + (obj['value'] || '');
+                input += '" placeholder="' + (obj['placeholder'] || '');
+                input += '" id="' + obj['id'] + '" name="' + obj['id'] + '">';
+                break;
+            case 'checkbox':
+            case 'radio':
+                if (Array.isArray(obj['value'])) {
+                    for (let val = 0; val < obj['value'].length; val++) {
+                        input += '<input class="modal_input" type="' + (obj['type'] || 'text');
+                        input += (obj['value'][val] ? '" checked' : '" ');
+                        input += ' id="' + obj['id'] + val + '" name="' + obj['id'] + val + '">';
+                        input += '<label class="modal_input_label" for="' + obj['id'] + '">';
+                        input += (obj['label'][val] || 'Input') + '</label>';
+                    }
+                } else {
+                    input += '<input class="modal_input" type="' + (obj['type'] || 'text');
+                    input += (obj['value'] ? '" checked' : '" ');
+                    input += ' id="' + obj['id'] + '" name="' + obj['id'] + '">';
+                    input += '<label class="modal_input_label" for="' + obj['id'] + '">';
+                    input += (obj['label'] || 'Input') + '</label>';
+                }
+                break;
         }
         input += '</div>';
 
@@ -120,15 +159,3 @@ class coolModal {
         this.backdrop.remove();
     }
 }
-
-window.addEventListener('load', function() {
-    let modal = new coolModal('Modal', 'medium');
-    modal.add_button('Save', function (event) {
-        console.log('Test');
-    }, 'right');
-    modal.add_button('Cancel', function (event) {
-        event.data.modal.close_modal();
-    }, 'right');
-    modal.add_input('half', 'text', 'Name:', '', 'Name');
-    modal.add_input('half', 'text', 'Surname:', '', 'Surname');
-});
