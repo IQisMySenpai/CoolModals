@@ -49,14 +49,21 @@ modal.add_button('Cancel', function (event) {
 ### Adding an Input Field
 
 The add_input function has the following parameters:
-- *size*: The side of the input. This can either be `full` or `half`.
-- *type*: A HTML input type.
-- *label*: Label that should be next to the input
-- *value*: Initial value of the input.
-- *placeholder*: Placeholder if supported by the input-type.
+- *obj*: Object with info about the input.
+  - *size*: The side of the input. This can either be `full` or `half`.
+  - *type*: A HTML input type.
+  - *label*: Label that should be next to the input. (Array for Checkbox/Radio Groups)
+  - *value*: Initial value of the input. (Array for Select or Checkbox/Radio Groups)
+  - *placeholder*: Placeholder if supported by the input-type.
 
 ```js
-modal.add_input('half', 'text', 'Name:', '', 'Name');
+modal.add_input({
+    'size': 'full',
+    'type': 'text',
+    'label': 'My Favorite Input',
+    'value': '',
+    'placeholder': 'Enter Text Here'
+});
 ```
 
 ### Full Example

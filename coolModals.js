@@ -114,6 +114,9 @@ class coolModal {
                         input += ' id="' + obj['id'] + val + '" name="' + obj['id'] + val + '">';
                         input += '<label class="modal_input_label" for="' + obj['id'] + '">';
                         input += (obj['label'][val] || 'Input') + '</label>';
+                        if (val < obj['value'].length - 1) {
+                            input += '<br>'
+                        }
                     }
                 } else {
                     input += '<input class="modal_input" type="' + (obj['type'] || 'text');
