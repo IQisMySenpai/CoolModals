@@ -126,6 +126,19 @@ class coolModal {
                     input += (obj['label'] || 'Input') + '</label>';
                 }
                 break;
+            case 'select':
+                input += '<label class="modal_input_label" for="' + obj['id'] + '">';
+                input += (obj['label'] || 'Input') + '</label>';
+                input += '<select class="modal_input"';
+                input += 'id="' + obj['id'] + '" name="' + obj['id'] + '">';
+                for (let val = 0; val < obj['value'].length; val++) {
+                    input += '<option value="';
+                    input += obj['value'][val].toLowerCase() + '"';
+                    input += (obj['selected'] === obj['value'][val] ? ' selected' : '');
+                    input += '>' + obj['value'][val] + '</option>';
+                }
+                input += '</select>';
+                break;
         }
         input += '</div>';
 
