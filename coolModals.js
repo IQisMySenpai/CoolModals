@@ -32,7 +32,7 @@ class coolModal {
                     'width': '20%',
                     'maxWidth': '20rem'
                 });
-                break
+                break;
             case 'medium':
                 this.modal.css({
                     'width': '60%',
@@ -52,6 +52,7 @@ class coolModal {
                 });
                 break;
         }
+        return this;
     }
 
     check_backdrop_click (event) { // Check if the backdrop is really pressed
@@ -73,6 +74,7 @@ class coolModal {
         let button = $('<button class="modal_button">' + text + '</button>');
         button.on('click', {modal: this}, func);
         this.modal.find('div.modal_' + side + '_buttons').append(button);
+        return this;
     }
 
     add_input (inputs) {
@@ -83,11 +85,12 @@ class coolModal {
         } else {
             this.new_input(inputs);
         }
+        return this;
     }
 
     new_input (obj) {
         if (obj['id'] === undefined) {
-            return;
+            return this;
         }
         let input = '<div class="modal_input_wrapper_' + (obj['size'] || 'full') + '">';
         switch (obj['type']) {
