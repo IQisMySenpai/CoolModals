@@ -3,9 +3,9 @@ window.addEventListener('load', function() {
 
     modal.add_button('Save', function (event) {
         console.log(this.get_inputs());
-        this.close_modal();
+        this.close();
     }, 'right').add_button('Cancel', function (event) {
-        this.close_modal();
+        this.close();
     }, 'right').add_inputs([{
         'id': 'name',
         'size': 'half',
@@ -20,5 +20,19 @@ window.addEventListener('load', function() {
         'label': 'Last Name: ',
         'value': '',
         'placeholder': 'Last Name'
+    },{
+        'id': 'email',
+        'size': 'half',
+        'type': 'email',
+        'label': 'Email: ',
+        'value': '',
+        'placeholder': 'Email'
+    },{
+        'id': 'password',
+        'size': 'full',
+        'type': 'adv-password',
+        'label': 'Password: ',
+        'value': '',
+        'placeholder': ''
     }]);
 });

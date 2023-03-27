@@ -138,42 +138,114 @@ class coolModal {
                         input.attr({
                             'type': (obj['type'] || 'text'),
                             'checked': obj['value'][i],
-                            'id': obj['id'] + i,
-                            'name': obj['id'] + i
+                            'id': `${obj['id']}_${i}`,
+                            'name': `${obj['id']}_${i}`
                         })
 
-                        label = 
+                        label = $('<label class="modal_input_label"></label>');
+                        label.attr({
+                            'for': `${obj['id']}_${i}`
+                        });
+                        label.text(obj['label'][i] || 'Input');
 
-                        input += '<label class="modal_input_label" for="' + obj['id'] + '">';
-                        input += (obj['label'][i] || 'Input') + '</label>';
+                        wrapper.append(input, label);
+
                         if (i < obj['value'].length - 1) {
-                            input += '<br>'
+                            wrapper.append('<br>');
                         }
                     }
                 } else {
-                    input += '<input class="modal_input" type="' + (obj['type'] || 'text');
-                    input += (obj['value'] ? '" checked' : '" ');
-                    input += ' id="' + obj['id'] + '" name="' + obj['id'] + '">';
-                    input += '<label class="modal_input_label" for="' + obj['id'] + '">';
-                    input += (obj['label'] || 'Input') + '</label>';
+                    input = $('<input class="modal_input">');
+                    input.attr({
+                        'type': (obj['type'] || 'text'),
+                        'checked': obj['value'],
+                        'id': obj['id'],
+                        'name': obj['id']
+                    })
+
+                    label = $('<label class="modal_input_label"></label>');
+                    label.attr({
+                        'for': obj['id']
+                    });
+                    label.text(obj['label'] || 'Input');
+
+                    wrapper.append(input, label);
                 }
                 break;
             case 'select':
-                input += '<label class="modal_input_label" for="' + obj['id'] + '">';
-                input += (obj['label'] || 'Input') + '</label>';
-                input += '<select class="modal_input"';
-                input += 'id="' + obj['id'] + '" name="' + obj['id'] + '">';
-                for (let val = 0; val < obj['value'].length; val++) {
-                    input += '<option value="';
-                    input += obj['value'][val].toLowerCase() + '"';
-                    input += (obj['selected'] === obj['value'][val] ? ' selected' : '');
-                    input += '>' + obj['value'][val] + '</option>';
+                label = $('<label class="modal_input_label"></label>');
+                label.attr({
+                    'for': obj['id']
+                });
+                label.text(obj['label'] || 'Input');
+
+                input = $('<select class="modal_input"></select>');
+                input.attr({
+                    'id': obj['id'],
+                    'name': obj['id']
+                });
+
+                for(let i = 0; i < obj['value'].length; i++) {
+                    let option = $('<option></option>');
+                    option.attr({
+                        'value': obj['value'][i].toLowerCase()
+                    });
+                    option.text(obj['value'][i]);
+                    if (obj['value'][i] === obj['selected']) {
+                        option.attr({
+                            'selected': true
+                        });
+                    }
+                    input.append(option);
                 }
-                input += '</select>';
+
+                wrapper.append(label, input);
                 break;
+            case 'textarea':
+                label = $('<label class="modal_input_label"></label>');
+                label.attr({
+                    'for': obj['id']
+                });
+                label.text(obj['label'] || 'Input');
+
+                input = $('<textarea class="modal_input"></textarea>');
+                input.attr({
+                    'id': obj['id'],
+                    'name': obj['id']
+                });
+                input.text(obj['value'] || '');
+                break;
+            case 'adv-password':
+                label = $('<label class="modal_input_label"></label>');
+                label.attr({
+                    'for': obj['id']
+                });
+                label.text(obj['label'] || 'Input');
+
+                input = $('<input class="modal_input">');
+                input.attr({
+                    'type': 'password',
+                    'id': obj['id'],
+                    'name': obj['id'],
+                    'placeholder': obj['placeholder'] || '',
+                    'value': obj['value'] || ''
+                });
+
+                let show_hide = $('<button class="modal_input_toggle">show</button>');
+                show_hide.on('click', function () {
+                    if (input.attr('type') === 'password') {
+                        input.attr('type', 'text');
+                        show_hide.text('hide');
+                    } else {
+                        input.attr('type', 'password');
+                        show_hide.text('show');
+                    }
+                });
+
+                wrapper.append(label, input, show_hide);
         }
 
-        this.body.append(input);
+        this.body.append(wrapper);
     }
 
     get_inputs () {
@@ -202,7 +274,19 @@ class coolModal {
         return values;
     }
 
-    close_modal () {
+    close () {
         this.backdrop.remove();
+    }
+
+    hide () {
+        this.backdrop.hide();
+    }
+
+    show () {
+        this.backdrop.show();
+    }
+
+    toggle () {
+        this.backdrop.toggle();
     }
 }

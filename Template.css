@@ -93,6 +93,7 @@ html, body {
     align-items: center;
     padding: 0.5rem;
     box-sizing: border-box;
+    position: relative;
 }
 
 .modal_input_wrapper_full {
@@ -119,5 +120,17 @@ html, body {
     flex: 1 1;
     box-sizing: border-box;
     min-width: 0;
+    position: relative;
+}
+
+.modal_input_toggle {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translate(0, -50%);
+    cursor: pointer;
+    border: 0 none;
+    background-color: transparent;
+    color: var(--primary);
 }
 

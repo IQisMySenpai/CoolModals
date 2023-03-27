@@ -38,12 +38,12 @@ Creating a new modal is done with the following parameters:
 
 The add_button function has the following parameters:
 - *text*: The text you want on the button.
-- *func*: Function that is executed on click. The function has the parameter events, with the `event.data.modal` as a self-reference.
+- *func*: Function that is executed on click. The function has the `this` keyword set to the modal.
 - *side*: The side you want the buttons on. This can either be `left` or `right`.
 
 ```js
 modal.add_button('Cancel', function (event) {
-    event.data.modal.close_modal();
+    this.close();
 }, 'right');
 ```
 
@@ -81,20 +81,24 @@ Getting the Inputs of the user is really simple and is done with
 ```js
 modal.get_inputs()
 ```
+or if you want multiple inputs
+```js
+modal.get_inputs([])
+```
 
 
 ### Full Example
-This code is unefficent but works.
+This code works and is really simple to understand.
 ```js
 let modal = new coolModal('My Modal', 'medium');
 
 modal.add_button('Save', function (event) {
-    console.log(event.data.modal.get_inputs());
-    event.data.modal.close_modal();
+    console.log(this.get_inputs());
+    this.close_modal();
 }, 'right');
 
 modal.add_button('Cancel', function (event) {
-    event.data.modal.close_modal();
+    this.close_modal();
 }, 'right');
 
 modal.add_input({
@@ -116,7 +120,7 @@ modal.add_input({
 });
 ```
 
-You could simplify and shorten it like this.
+You could shorten this code by using an array of inputs and using the `add_inputs` function once.
 
 ```js
 let modal = new coolModal('My Modal', 'medium');
@@ -141,11 +145,11 @@ let inputs = [
 ];
 
 modal.add_button('Save', function (event) {
-    console.log(event.data.modal.get_inputs());
-    event.data.modal.close_modal();
+    console.log(this.get_inputs());
+    this.close_modal();
 }, 'right').add_button('Cancel', function (event) {
-    event.data.modal.close_modal();
+    this.close_modal();
 }, 'right');
 
-modal.add_input(inputs);
+modal.add_inputs(inputs);
 ```
