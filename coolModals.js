@@ -1,28 +1,42 @@
 class coolModal {
-    backdrop;
-    modal;
+    // Elements
+    backdrop = null;
+    modal = null;
+    header = null;
+    body = null;
+    buttons = null;
+
+    // Other
+    width_val;
+    header_val;
+
 
     constructor (header = 'Modal', width = null) {
-        let modal = '<div class="modal_backdrop">'; // Create Initial HTML
-        modal += '<div class="modal">';
-        modal += '<div class="modal_header">';
-        modal += header
-        modal += '</div>';
-        modal += '<div class="modal_body">';
-        modal += '</div>';
-        modal += '</div>';
-        modal += '</div>';
-
-        this.header = header
-
-        this.backdrop = $(modal); // Save entire modal
-        this.backdrop.on('click', {modal: this}, function (event) { // Make the modal close on backdrop click
-            event.data.modal.check_backdrop_click(event);
-        })
-        $(document.body).append(this.backdrop); // Append modal to
-        this.modal = this.backdrop.find('div.modal'); // Save only the modal, for quicker access
-
+        this.initialize_elements();
+        this.set_header(header);
         this.set_width(width); // Change width of modal
+
+        this.backdrop.on('click', function (event) { // Make the modal close on backdrop click
+            this.check_backdrop_click(event);
+        }.bind(this))
+        this.backdrop.data('modal', this);
+    }
+
+    initialize_elements() {
+        this.backdrop = $('<div class="modal_backdrop"></div>');
+        this.modal = $('<div class="modal"></div>');
+        this.header = $('<div class="modal_header"></div>');
+        this.body = $('<div class="modal_body"></div>');
+
+        this.modal.append(this.header, this.body);
+        this.backdrop.append(this.modal);
+
+        $(document.body).append(this.backdrop);
+    }
+
+    set_header(text = 'Modal') {
+        this.header_val = text;
+        this.header.html(text);
     }
 
     set_width(width) {
@@ -55,44 +69,42 @@ class coolModal {
         return this;
     }
 
-    check_backdrop_click (event) { // Check if the backdrop is really pressed
-        if ($(event.target).hasClass('modal_backdrop')) {
+    check_backdrop_click (event) {
+        if ($(event.target).hasClass('modal_backdrop')) { // Check if the backdrop is really pressed
             this.close_modal();
         }
     }
 
-    add_button(text, func, side) { // Add button to modal
-        if (this.modal.find('div.modal_buttons').length < 1) { // Check if modal already has buttons
-            let buttons = '<div class="modal_buttons">';
-            buttons += '<div class="modal_left_buttons">';
-            buttons += '</div>';
-            buttons += '<div class="modal_right_buttons">';
-            buttons += '</div>';
-            buttons += '</div>';
-            this.modal.append(buttons);
+    add_button(text, func, side) {
+        if (this.buttons === null) { // Check if modal already has buttons
+            this.buttons = $('<div class="modal_buttons"></div>');
+            this.buttons.append($('<div class="modal_left_buttons"></div>'), $('<div class="modal_right_buttons"></div>'));
+            this.modal.append(this.buttons);
         }
         let button = $('<button class="modal_button">' + text + '</button>');
-        button.on('click', {modal: this}, func);
+        button.on('click', func.bind(this));
         this.modal.find('div.modal_' + side + '_buttons').append(button);
         return this;
     }
 
-    add_input (inputs) {
-        if (Array.isArray(inputs)) {
-            for (let input = 0; input < inputs.length; input++) {
-                this.new_input(inputs[input]);
-            }
-        } else {
-            this.new_input(inputs);
-        }
+    add_input (input) {
+        this.new_input(input);
+
         return this;
+    }
+
+    add_inputs (inputs) {
+        for (let i = 0; i < inputs.length; i++) {
+            this.new_input(inputs[i]);
+        }
     }
 
     new_input (obj) {
         if (obj['id'] === undefined) {
             return this;
         }
-        let input = '<div class="modal_input_wrapper_' + (obj['size'] || 'full') + '">';
+        let wrapper = $('<div class="modal_input_wrapper_' + (obj['size'] || 'full') + '"></div>');
+        let label, input;
         switch (obj['type']) {
             case 'text':
             case 'password':
@@ -101,23 +113,40 @@ class coolModal {
             case 'search':
             case 'number':
             case 'email':
-                input += '<label class="modal_input_label" for="' + obj['id'] + '">';
-                input += (obj['label'] || 'Input') + '</label>';
-                input += '<input class="modal_input" type="' + (obj['type'] || 'text');
-                input += '" value="' + (obj['value'] || '');
-                input += '" placeholder="' + (obj['placeholder'] || '');
-                input += '" id="' + obj['id'] + '" name="' + obj['id'] + '">';
+                label = $('<label class="modal_input_label"></label>');
+                label.attr({
+                    'for': obj['id']
+                });
+                label.text(obj['label'] || 'Input');
+
+                input = $('<input class="modal_input">');
+                input.attr({
+                    'type': (obj['type'] || 'text'),
+                    'value': (obj['value'] || ''),
+                    'placeholder': (obj['placeholder'] || ''),
+                    'id': obj['id'],
+                    'name': obj['id']
+                })
+
+                wrapper.append(label, input);
                 break;
             case 'checkbox':
             case 'radio':
                 if (Array.isArray(obj['value'])) {
-                    for (let val = 0; val < obj['value'].length; val++) {
-                        input += '<input class="modal_input" type="' + (obj['type'] || 'text');
-                        input += (obj['value'][val] ? '" checked' : '" ');
-                        input += ' id="' + obj['id'] + val + '" name="' + obj['id'] + val + '">';
+                    for (let i = 0; i < obj['value'].length; i++) {
+                        input = $('<input class="modal_input">');
+                        input.attr({
+                            'type': (obj['type'] || 'text'),
+                            'checked': obj['value'][i],
+                            'id': obj['id'] + i,
+                            'name': obj['id'] + i
+                        })
+
+                        label = 
+
                         input += '<label class="modal_input_label" for="' + obj['id'] + '">';
-                        input += (obj['label'][val] || 'Input') + '</label>';
-                        if (val < obj['value'].length - 1) {
+                        input += (obj['label'][i] || 'Input') + '</label>';
+                        if (i < obj['value'].length - 1) {
                             input += '<br>'
                         }
                     }
@@ -143,9 +172,8 @@ class coolModal {
                 input += '</select>';
                 break;
         }
-        input += '</div>';
 
-        this.modal.find('div.modal_body').append(input);
+        this.body.append(input);
     }
 
     get_inputs () {
