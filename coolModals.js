@@ -71,7 +71,7 @@ class coolModal {
 
     check_backdrop_click (event) {
         if ($(event.target).hasClass('modal_backdrop')) { // Check if the backdrop is really pressed
-            this.close_modal();
+            this.close();
         }
     }
 
